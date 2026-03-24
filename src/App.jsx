@@ -29,6 +29,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('my-savings');
   const [toast, setToast]             = useState(null);
   const [darkMode, setDarkMode]       = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Apply dark class to <html>
   useEffect(() => {
@@ -126,7 +127,13 @@ function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Sidebar role={currentUser.role} currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Sidebar
+          role={currentUser.role}
+          currentPage={currentPage}
+          onNavigate={setCurrentPage}
+          mobileOpen={sidebarOpen}
+          onMobileClose={() => setSidebarOpen(false)}
+        />
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar
           user={currentUser}
@@ -134,6 +141,7 @@ function App() {
           darkMode={darkMode}
           onToggleDarkMode={() => setDarkMode((d) => !d)}
           notifCount={payments.length}
+          onMenuOpen={() => setSidebarOpen(true)}
         />
         <main className="flex-1 p-4 lg:p-8 overflow-auto scrollbar-thin">
           <AnimatePresence mode="wait">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Wallet, CreditCard, HandCoins, CheckCircle2, FileCheck,
-  LayoutDashboard, UsersRound, Trophy, Menu, X, ChevronLeft, Coins,
+  LayoutDashboard, UsersRound, Trophy, X, ChevronLeft, Coins,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -28,8 +28,7 @@ const ROLE_COLORS = {
   admin:      'bg-rose-500/10 text-rose-400',
 };
 
-export default function Sidebar({ role, currentPage, onNavigate }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Sidebar({ role, currentPage, onNavigate, mobileOpen, onMobileClose }) {
   const [collapsed, setCollapsed] = useState(false);
   const items = MENUS[role] || [];
 
@@ -37,7 +36,7 @@ export default function Sidebar({ role, currentPage, onNavigate }) {
     const active = currentPage === item.path;
     return (
       <button
-        onClick={() => { onNavigate(item.path); setMobileOpen(false); }}
+        onClick={() => { onNavigate(item.path); onMobileClose(); }}
         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group relative
           ${active
             ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
@@ -99,14 +98,6 @@ export default function Sidebar({ role, currentPage, onNavigate }) {
 
   return (
     <>
-      {/* Mobile toggle */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-xl shadow-lg"
-      >
-        <Menu size={20} />
-      </button>
-
       {/* Mobile overlay */}
       <AnimatePresence>
         {mobileOpen && (
@@ -115,7 +106,7 @@ export default function Sidebar({ role, currentPage, onNavigate }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
+            onClick={onMobileClose}
           />
         )}
       </AnimatePresence>
@@ -131,7 +122,7 @@ export default function Sidebar({ role, currentPage, onNavigate }) {
             className="lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-slate-900"
           >
             <button
-              onClick={() => setMobileOpen(false)}
+              onClick={onMobileClose}
               className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition"
             >
               <X size={18} />
